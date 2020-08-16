@@ -3,7 +3,7 @@ from pprint import PrettyPrinter
 import geojson
 import json
 from datetime import datetime
-from AOTNode import AOTNode, Measurement
+from .AOTNode import AOTNode, Measurement
 
 # get a list of AOT Nodes and return it as a list
 def getAOTNodes(project : str = None, size : int = 200):
@@ -69,23 +69,18 @@ def stripEmptyNodes(nodes : list):
 
     return ret_list
 
-ns = getAOTNodes(project="chicago", size=200)
+def getData(verbose : bool = False):
+    ns = getAOTNodes(project="chicago", size=500)
 
-#for n in ns:
-#    print(n)
+    updateMeasurements(ns, 500)
 
-updateMeasurements(ns, 200)
+    ns = stripEmptyNodes(ns)
 
-#for n in ns:
-#    print(n)
-
-ns = stripEmptyNodes(ns)
-print(len(ns))
-for n in ns:
-    print(n)
-    measurements = n.getMeasurements()
-    for measurement in measurements:
-        print(str(measurement))
-
-    print()
-    print()
+    if verbose == True:
+        print("There are " + len(ns) + " nodes reporting:\n")
+        for n in ns:
+            measurements = n.getMeasurements()
+            for measurement in measurements:
+                print(str(measurement))
+    
+    return ns
