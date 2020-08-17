@@ -7,15 +7,16 @@ import dash_html_components as html
 
 from aot_api.data_fetcher import getData
 from aot_api.AOTNode import AOTNode, Measurement
+from map_figure import chicago_map
 
 def createCO2Graph():
-    return go.Figure()
+    return chicago_map
 
 def createNO2Graph():
-    return go.Figure()
+    return chicago_map
 
 def create3umGraph():
-    return go.Figure()
+    return chicago_map
 
 def create5umGraph():
-    return go.Figure()
+    return chicago_map
