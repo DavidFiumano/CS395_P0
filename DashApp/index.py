@@ -18,24 +18,20 @@ STUDENT_CODE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if STUDENT_CODE_PATH not in sys.path:
     sys.path.append(STUDENT_CODE_PATH)
 
-from student import createCO2Graph, createNO2Graph, create3umGraph, create5umGraph
+from student import createParticulateGraph, createGasGraph, createWeatherGraph
 
 dropdown_opts = [
     {
-        'label' : 'CO2 Sensors',
-        'value' : 'CO2_Graph'
+        'label' : 'Gas Sensors',
+        'value' : 'Gas_Graph'
     },
     {
-        'label' : 'NO2 Sensors',
-        'value' : 'NO2_Graph'
+        'label' : 'Particle Sensors',
+        'value' : 'Particle_Graph'
     },
     {
-        'label' : '3um Particle Sensors',
-        'value' : '3um_Graph'
-    },
-    {
-        'label' : '5um Particle Sensors',
-        'value' : '5um_Graph'
+        'label' : 'Weather Sensors',
+        'value' : 'Weather_Graph'
     }
 ]
 
@@ -43,7 +39,7 @@ app.layout = html.Div(
     children=[
                 dcc.Interval(id='graph_update_interval', interval=300000), # update graphs every 5 min, when new data is ready
                 html.H1("CS 395 Project 0"),
-                dcc.Dropdown(id='graph_selector', options=dropdown_opts, value='CO2_Graph'),
+                dcc.Dropdown(id='graph_selector', options=dropdown_opts, value='Weather_Graph'),
                 html.Button('Take an Interactive Snapshot', id='graph_snapshot_button', n_clicks=0),
                 html.H3(id='snapshot_text'),
                 dcc.Graph(id='student_graph')
@@ -58,18 +54,16 @@ app.layout = html.Div(
 )
 def create_app_callback(value):
     if value == None:
-        return createCO2Graph()
-    elif value == 'CO2_Graph':
-        return createCO2Graph()
-    elif value == 'NO2_Graph':
-        return createNO2Graph()
-    elif value == '3um_Graph':
-        return create3umGraph()
-    elif value == '5um_Graph':
-        return create5umGraph()
+        return createWeatherGraph()
+    elif value == 'Weather_Graph':
+        return createWeatherGraph()
+    elif value == 'Gas_Graph':
+        return createGasGraph()
+    elif value == 'Particle_Graph':
+        return createParticulateGraph()
     else:
-        print('For some reason, the graph selector was set to an unknown value: ' + str(value) + '\nDefaulting to CO2 graph.')
-        return createCO2Graph()
+        print('For some reason, the graph selector was set to an unknown value: ' + str(value) + '\nDefaulting to Weather graph.')
+        return createWeatherGraph()
 
 @app.callback(
     Output('snapshot_text', 'children'),

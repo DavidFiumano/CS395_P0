@@ -1,8 +1,18 @@
+# ATTENTION INTREPID CS 395 STUDENTS
+# Hi, glad you're curious about the AOT API :)
+# This code is dedicated to my roommates and parents, 
+# since they'll have to pay my rent when this code gets out into the public.
+
+# Just kidding! The code is slightly suboptimal though, in the sense that it 
+# makes a separate API request to get measurements (observations) from each node in the list getAOTNodes returns.
+# This could/should instead be bundled together so that it happens in 1 request but even teachers get lazy sometimes.
+# The code is also not especially well-optimized (it takes about a second to run)
+
 import requests
 from pprint import PrettyPrinter
 import geojson
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from .AOTNode import AOTNode, Measurement
 
 # get a list of AOT Nodes and return it as a list
@@ -53,9 +63,9 @@ def updateMeasurements(nodes : list, size : int):
 
             value = observation['value']
 
-            measurement = Measurement(uom, timestamp, value)
-
             sensorpath = observation['sensor_path']
+
+            measurement = Measurement(uom, timestamp, sensorpath, value)
 
             node.updateMeasurement(sensorpath, measurement)
 
@@ -69,18 +79,27 @@ def stripEmptyNodes(nodes : list):
 
     return ret_list
 
+# jank caching variables.
+ns = None
+ts = None
+
 def getData(verbose : bool = False):
-    ns = getAOTNodes(project="chicago", size=500)
+    global ns
+    global ts
+    if ns == None or ts == None or datetime.now() - ts >= timedelta(minutes=5):
 
-    updateMeasurements(ns, 500)
+        ns = getAOTNodes(project="chicago", size=500)
+        ts = datetime.now()
 
-    ns = stripEmptyNodes(ns)
+        updateMeasurements(ns, 500)
+
+        ns = stripEmptyNodes(ns)
 
     if verbose == True:
-        print("There are " + len(ns) + " nodes reporting:\n")
+        print("There are " + str(len(ns)) + " nodes reporting:\n")
         for n in ns:
             measurements = n.getMeasurements()
             for measurement in measurements:
-                print(str(measurement))
+                print(str(measurements[measurement]))
     
     return ns

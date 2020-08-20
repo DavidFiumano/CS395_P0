@@ -4,16 +4,20 @@ from pprint import pformat
 
 class Measurement:
 
-    def __init__(self, uom : str, timestamp : datetime, value):
+    def __init__(self, uom : str, timestamp : datetime, path : str, value):
         self.uom = uom
         self.timestamp = timestamp
         self.value = value
+        self.path = path
 
     def __str__(self):
-        ret_str = "Measurement:\n"
-        ret_str += "  Units: " + self.uom +'\n'
+        ret_str = "Measurement: " + self.path + "\n"
+        ret_str += "  Units: " + str(self.uom) +'\n'
         ret_str += "  Timestamp: " + str(self.timestamp) + '\n'
-        ret_str += "  Value: " + str(self.value) + " " + self.uom
+        if self.uom != None:
+            ret_str += "  Value: " + str(self.value) + " " + str(self.uom)
+        else:
+            ret_str += "  Value: " + str(self.value)
 
         return ret_str
 

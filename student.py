@@ -1,5 +1,6 @@
 import plotly
 import plotly.graph_objects as go
+import plotly.express as px
 
 import dash
 import dash_core_components as dcc
@@ -9,14 +10,11 @@ from aot_api.data_fetcher import getData
 from aot_api.AOTNode import AOTNode, Measurement
 from map_figure import chicago_map
 
-def createCO2Graph():
+def createWeatherGraph():   
     return chicago_map
 
-def createNO2Graph():
+def createGasGraph():
     return chicago_map
 
-def create3umGraph():
-    return chicago_map
-
-def create5umGraph():
+def createParticulateGraph():
     return chicago_map
