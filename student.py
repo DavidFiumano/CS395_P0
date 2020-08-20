@@ -51,10 +51,11 @@ def allNodesGraph():
         mapbox= # If you do not include this (centering and zooming on your map), you will lose points. Please include it so we don't have to zoom in a ton to grade your stuff
             {
                 "center" : go.layout.mapbox.Center(
-                    lat=41.8781,
+                    lat=41.8781, # this is chicago's GPS coordinates according to google maps
                     lon=-87.6298
                 ),
-                "zoom" : 9
+                "zoom" : 9 # set this to something reasonable for you and your computer. 
+                # As long as we can see all the nodes and don't need to move or zoom into the graph too much to find them all, I am happy with whatever you set the 'zoom' value to
             }
     )
 
