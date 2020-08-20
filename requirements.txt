@@ -3,5 +3,6 @@ plotly >= 4.8.2
 requests >= 2.24.0
 pandas >= 1.1.0
 geojson >= 2.5.0
+numpy >= 1.9.1
 
 # run 'conda install --file requirements.txt -c conda-forge' to install

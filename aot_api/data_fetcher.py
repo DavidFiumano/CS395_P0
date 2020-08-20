@@ -83,12 +83,12 @@ def stripEmptyNodes(nodes : list):
 ns = None
 ts = None
 
-def getData(verbose : bool = False):
+def getData(project_slug : str = "chicago", verbose : bool = False):
     global ns
     global ts
     if ns == None or ts == None or datetime.now() - ts >= timedelta(minutes=5):
-
-        ns = getAOTNodes(project="chicago", size=500)
+        
+        ns = getAOTNodes(project=project_slug, size=500)
         ts = datetime.now()
 
         updateMeasurements(ns, 500)

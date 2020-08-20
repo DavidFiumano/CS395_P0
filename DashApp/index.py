@@ -18,7 +18,7 @@ STUDENT_CODE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if STUDENT_CODE_PATH not in sys.path:
     sys.path.append(STUDENT_CODE_PATH)
 
-from student import createParticulateGraph, createGasGraph, createWeatherGraph
+from student import createParticulateGraph, createGasGraph, createWeatherGraph, allNodesGraph
 
 dropdown_opts = [
     {
@@ -32,14 +32,17 @@ dropdown_opts = [
     {
         'label' : 'Weather Sensors',
         'value' : 'Weather_Graph'
+    },
+    {
+        'label' : 'All Nodes',
+        'value' : 'All_Nodes_Graph'
     }
 ]
 
 app.layout = html.Div(
     children=[
-                dcc.Interval(id='graph_update_interval', interval=300000), # update graphs every 5 min, when new data is ready
                 html.H1("CS 395 Project 0"),
-                dcc.Dropdown(id='graph_selector', options=dropdown_opts, value='Weather_Graph'),
+                dcc.Dropdown(id='graph_selector', options=dropdown_opts, value='All_Nodes_Graph'),
                 html.Button('Take an Interactive Snapshot', id='graph_snapshot_button', n_clicks=0),
                 html.H3(id='snapshot_text'),
                 dcc.Graph(id='student_graph')
@@ -61,6 +64,8 @@ def create_app_callback(value):
         return createGasGraph()
     elif value == 'Particle_Graph':
         return createParticulateGraph()
+    elif value == "All_Nodes_Graph":
+        return allNodesGraph()
     else:
         print('For some reason, the graph selector was set to an unknown value: ' + str(value) + '\nDefaulting to Weather graph.')
         return createWeatherGraph()
