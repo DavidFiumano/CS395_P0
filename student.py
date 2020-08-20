@@ -20,15 +20,21 @@ def allNodesGraph():
     vsns = list() # You can, but are not required to, extract the node ID numbers from the nodes
     sizes = list() # to set the sizes of each node's map marker differently, store the sizes in an array
     sensors_reporting = list() # technically redundant in this case, but keep track of the number of sensors reporting for each node
+    addresses = list() # a list of street addresses for the nodes
+    descriptions = list() # a list of descriptions for the nodes
     # I know that sizes and sensors_reporting will be equal, this is just so I can show you how to put in custom data
     
     # get the data you want into lists to be graphed
     for node in data: # in this case, we don't really do any processing but you may want to calculate values here too.
         lats.append(node.latitude) # latitude and longitude, so you know where to plot stuff
         lons.append(node.longitude)
-        vsns.append(node.vsn) # vsns, so we can give the name of each node
+        
         sizes.append(len(node.getMeasurements())) # node.getMeasurements() returns a dictionary with all the measurements that node has taken.
-        sensors_reporting.append(len(node.getMeasurements()))
+        
+        sensors_reporting.append(len(node.getMeasurements())) # The number of sensors reporting on each node
+        vsns.append(node.vsn) # vsns, so we can give the name of each node
+        addresses.append(node.address) # The address of the node
+        descriptions.append(node.description) # The description of the node
 
     cm = go.Figure( # create a plotly figure to return
         go.Scattermapbox( # This figure is a type called a Scattermapbox plot
@@ -37,11 +43,13 @@ def allNodesGraph():
             lat=lats, # specify latitude
             lon=lons, # specify longitude
             marker = {'size': sizes}, # specify the size of the markers. You can also specify color and other neat things this way
-            customdata = np.stack([vsns, sensors_reporting], axis=-1), # we want to add some custom data for each node, in this case we want to show the node id and the sensors reporting in our hover data
+            customdata = np.stack([vsns, sensors_reporting, addresses, descriptions], axis=-1), # we want to add some custom data for each node, np.stack([data], axis=-1) puts it in an easy to parse format for the hovertext
             hovertemplate = 'Node %{customdata[0]} Data:<br>' + # When you hover on a node, display "Node {the vsn of the node} Data:\n"
-            'Latitude %{lat}<br>' + # Latitude: {Node Latitude}\n
-            'Longitude %{lon}<br>' + # Longitude: {Node Longitude}\n
-            'Sensors Reporting: %{customdata[1]}', # Sensors Reporting: {The number of sensors reporting on this node}. Equivalent to 'Sensors Reporting: %{marker.size}'
+            '| Latitude %{lat}<br>' + # | Latitude: {Node Latitude}\n
+            '| Longitude %{lon}<br>' + # | Longitude: {Node Longitude}\n
+            '| Sensors Reporting: %{customdata[1]}<br>' + # | Sensors Reporting: {The number of sensors reporting on this node}. Equivalent to 'Sensors Reporting: %{marker.size}'
+            '| Address: %{customdata[2]}<br>' +
+            '| Description: %{customdata[3]}'
         )
     )
 

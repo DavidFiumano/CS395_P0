@@ -87,13 +87,19 @@ def getData(project_slug : str = "chicago", verbose : bool = False):
     global ns
     global ts
     if ns == None or ts == None or datetime.now() - ts >= timedelta(minutes=5):
-        
+        expired = ns != None
+        if expired:
+            print("Data is expired, getting new data...")
+
         ns = getAOTNodes(project=project_slug, size=500)
         ts = datetime.now()
 
         updateMeasurements(ns, 500)
 
         ns = stripEmptyNodes(ns)
+
+        if expired:
+            print("Data retrieved!")
 
     if verbose == True:
         print("There are " + str(len(ns)) + " nodes reporting:\n")
